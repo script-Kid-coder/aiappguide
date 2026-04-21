@@ -1,0 +1,57 @@
+baseURL = "https://aiappguide.co.uk/"
+languageCode = "en-gb"
+title = "AI App Guide"
+theme = "PaperMod"
+paginate = 10
+
+[params]
+  env = "production"
+  title = "AI App Guide"
+  description = "Honest reviews and guides for the best AI tools and apps — helping UK users work smarter."
+  keywords = ["AI tools", "AI apps", "AI reviews", "productivity", "UK"]
+  author = "AI App Guide"
+  defaultTheme = "auto"
+  disableThemeToggle = false
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+  TocOpen = false
+
+[params.homeInfoParams]
+  Title = "Your Guide to the Best AI Tools 🤖"
+  Content = "Honest reviews, comparisons and tutorials for AI apps — so you can work smarter without wasting money."
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/YOUR_USERNAME"
+
+[params.analytics.google]
+  SiteVerificationTag = ""
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+
+[menu]
+  [[menu.main]]
+    identifier = "reviews"
+    name = "Reviews"
+    url = "/categories/reviews/"
+    weight = 10
+  [[menu.main]]
+    identifier = "guides"
+    name = "Guides"
+    url = "/categories/guides/"
+    weight = 20
+  [[menu.main]]
+    identifier = "comparisons"
+    name = "Comparisons"
+    url = "/categories/comparisons/"
+    weight = 30
+
+[markup.highlight]
+  noClasses = false
