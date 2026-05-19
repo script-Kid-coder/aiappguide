@@ -2,6 +2,7 @@ baseURL = "https://aiappguide.co.uk/"
 languageCode = "en-gb"
 title = "AI App Guide"
 theme = "PaperMod"
+
 [pagination]
   pagerSize = 10
 
@@ -11,7 +12,7 @@ theme = "PaperMod"
   description = "Honest reviews and guides for the best AI tools and apps — helping UK users work smarter."
   keywords = ["AI tools", "AI apps", "AI reviews", "productivity", "UK"]
   author = "AI App Guide"
-  defaultTheme = "auto"
+  defaultTheme = "dark"
   disableThemeToggle = false
   ShowReadingTime = true
   ShowShareButtons = true
@@ -21,9 +22,16 @@ theme = "PaperMod"
   ShowToc = true
   TocOpen = false
 
+  # Custom CSS for ScreenlessTracker-style redesign
+  assets.customCSS = ["css/custom.css"]
+
+  # Cover image settings
+  cover.linkFullImages = true
+  cover.responsiveImages = true
+
 [params.homeInfoParams]
-  Title = "Your Guide to the Best AI Tools 🤖"
-  Content = "Honest reviews, comparisons and tutorials for AI apps — so you can work smarter without wasting money."
+  Title = "Your Guide to the Best AI Tools"
+  Content = "Honest reviews, comparisons and guides for AI apps — so you know what's worth using before you spend a penny."
 
 [[params.socialIcons]]
   name = "github"
@@ -39,20 +47,30 @@ theme = "PaperMod"
 
 [menu]
   [[menu.main]]
+    identifier = "all-reviews"
+    name = "All Reviews"
+    url = "/categories/reviews/"
+    weight = 10
+  [[menu.main]]
     identifier = "reviews"
     name = "Reviews"
     url = "/categories/reviews/"
-    weight = 10
+    weight = 20
+  [[menu.main]]
+    identifier = "best-picks"
+    name = "Best Picks"
+    url = "/categories/best-picks/"
+    weight = 30
   [[menu.main]]
     identifier = "guides"
     name = "Guides"
     url = "/categories/guides/"
-    weight = 20
+    weight = 40
   [[menu.main]]
     identifier = "comparisons"
     name = "Comparisons"
     url = "/categories/comparisons/"
-    weight = 30
+    weight = 50
 
 [markup.highlight]
   noClasses = false
