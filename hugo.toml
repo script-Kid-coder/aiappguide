@@ -23,7 +23,7 @@ theme = "PaperMod"
   TocOpen = false
 
   # Custom CSS for ScreenlessTracker-style redesign
-  assets.customCSS = ["css/custom.css"]
+  assets.customCSS = ["CSS/custom.css"]
 
   # Cover image settings
   cover.linkFullImages = true
