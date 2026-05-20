@@ -1,0 +1,348 @@
+<div class="sapphires-tool">
+  <section class="tool-hero">
+    <span class="tool-kicker">Cost estimator</span>
+    <h1>LLM API Pricing Calculator</h1>
+    <p>Estimate monthly API spend across OpenAI, Anthropic, Gemini, and your own custom presets.</p>
+  </section>
+
+  <section class="tool-grid">
+    <article class="tool-card">
+      <h2>Usage</h2>
+      <div class="tool-form">
+        <label>
+          <span>Requests per month</span>
+          <input id="req" type="number" min="1" step="1" value="100000">
+        </label>
+        <label>
+          <span>Input tokens per request</span>
+          <input id="inTok" type="number" min="0" step="1" value="1500">
+        </label>
+        <label>
+          <span>Output tokens per request</span>
+          <input id="outTok" type="number" min="0" step="1" value="350">
+        </label>
+        <label>
+          <span>Cached input tokens</span>
+          <input id="cacheTok" type="number" min="0" step="1" value="0">
+        </label>
+      </div>
+
+      <div class="tool-stats">
+        <div><small>Monthly input</small><strong id="sumIn">0</strong></div>
+        <div><small>Monthly output</small><strong id="sumOut">0</strong></div>
+        <div><small>Monthly cached</small><strong id="sumCache">0</strong></div>
+      </div>
+    </article>
+
+    <article class="tool-card">
+      <h2>Pricing presets</h2>
+      <div class="tool-table-wrap">
+        <table class="tool-table">
+          <thead>
+            <tr>
+              <th>Provider</th>
+              <th>Model</th>
+              <th>Input</th>
+              <th>Output</th>
+              <th>Cached</th>
+            </tr>
+          </thead>
+          <tbody id="pricingBody"></tbody>
+        </table>
+      </div>
+      <p class="tool-note">Prices shown as USD per 1M tokens. Edit these anytime.</p>
+    </article>
+  </section>
+
+  <section class="tool-results-wrap">
+    <article class="tool-card">
+      <h2>Comparison</h2>
+      <div id="results" class="tool-results"></div>
+    </article>
+  </section>
+</div>
+
+<style>
+  .sapphires-tool{
+    --bg:#071018;
+    --bg-2:#0d1724;
+    --card:#101c2b;
+    --card-2:#132234;
+    --border:rgba(120,175,255,.12);
+    --text:#edf6ff;
+    --muted:#9eb2c8;
+    --accent:#00d4d8;
+    --accent-2:#47a8ff;
+    --success:#34d399;
+    --warn:#fbbf24;
+    --radius:18px;
+    --shadow:0 20px 60px rgba(0,0,0,.28);
+    margin:3rem 0;
+    color:var(--text);
+  }
+  .sapphires-tool *{box-sizing:border-box}
+  .sapphires-tool .tool-hero{
+    padding:2rem 0 1.25rem;
+  }
+  .sapphires-tool .tool-kicker{
+    display:inline-flex;
+    padding:.45rem .85rem;
+    border-radius:999px;
+    background:rgba(0,212,216,.12);
+    color:var(--accent);
+    font-size:.85rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-weight:700;
+  }
+  .sapphires-tool h1{
+    margin:.9rem 0 .6rem;
+    font-size:clamp(2.1rem,4.4vw,4.2rem);
+    line-height:1.02;
+    letter-spacing:-.04em;
+    color:var(--text);
+  }
+  .sapphires-tool p{color:var(--muted)}
+  .sapphires-tool h2{
+    margin:0 0 1rem;
+    font-size:1.25rem;
+    letter-spacing:-.02em;
+    color:var(--text);
+  }
+  .sapphires-tool .tool-grid{
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:1.25rem;
+    margin-top:1.25rem;
+  }
+  .sapphires-tool .tool-results-wrap{margin-top:1.25rem}
+  .sapphires-tool .tool-card{
+    background:linear-gradient(180deg,var(--card),var(--card-2));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:1.2rem;
+    box-shadow:var(--shadow);
+  }
+  .sapphires-tool .tool-form{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:1rem;
+  }
+  .sapphires-tool label{
+    display:grid;
+    gap:.4rem;
+  }
+  .sapphires-tool label span,
+  .sapphires-tool small{
+    font-size:.82rem;
+    font-weight:700;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+  .sapphires-tool input{
+    width:100%;
+    min-height:48px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.04);
+    color:var(--text);
+    padding:.85rem 1rem;
+    outline:none;
+  }
+  .sapphires-tool input:focus{
+    border-color:rgba(0,212,216,.55);
+    box-shadow:0 0 0 4px rgba(0,212,216,.14);
+  }
+  .sapphires-tool .tool-stats{
+    margin-top:1rem;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:.9rem;
+  }
+  .sapphires-tool .tool-stats div,
+  .sapphires-tool .result-metrics div{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:14px;
+    padding:.85rem;
+  }
+  .sapphires-tool .tool-stats strong{
+    display:block;
+    margin-top:.25rem;
+    font-size:1.1rem;
+    color:var(--text);
+  }
+  .sapphires-tool .tool-table-wrap{overflow-x:auto}
+  .sapphires-tool .tool-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:680px;
+  }
+  .sapphires-tool th,
+  .sapphires-tool td{
+    text-align:left;
+    padding:.8rem .65rem;
+    border-bottom:1px solid rgba(255,255,255,.07);
+    color:var(--text);
+  }
+  .sapphires-tool th{
+    font-size:.78rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--muted);
+  }
+  .sapphires-tool .tool-note{
+    margin-top:.9rem;
+    font-size:.95rem;
+  }
+  .sapphires-tool .tool-results{
+    display:grid;
+    gap:1rem;
+  }
+  .sapphires-tool .result-card{
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.035);
+    border-radius:16px;
+    padding:1rem;
+  }
+  .sapphires-tool .result-top{
+    display:flex;
+    justify-content:space-between;
+    gap:1rem;
+    align-items:flex-start;
+  }
+  .sapphires-tool .provider{
+    font-size:.76rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .sapphires-tool .model{
+    font-size:1.15rem;
+    font-weight:800;
+    color:var(--text);
+  }
+  .sapphires-tool .price{
+    font-size:clamp(1.5rem,2.4vw,2.3rem);
+    font-weight:900;
+    letter-spacing:-.04em;
+    color:var(--text);
+  }
+  .sapphires-tool .badge{
+    display:inline-flex;
+    padding:.35rem .6rem;
+    border-radius:999px;
+    font-size:.72rem;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:.45rem;
+  }
+  .sapphires-tool .badge-win{background:rgba(52,211,153,.14);color:var(--success)}
+  .sapphires-tool .badge-mid{background:rgba(251,191,36,.14);color:var(--warn)}
+  .sapphires-tool .result-metrics{
+    margin-top:.9rem;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:.75rem;
+  }
+  .sapphires-tool .result-metrics strong{
+    display:block;
+    margin-top:.2rem;
+    color:var(--text);
+  }
+  @media (max-width: 900px){
+    .sapphires-tool .tool-grid{grid-template-columns:1fr}
+  }
+  @media (max-width: 700px){
+    .sapphires-tool .tool-form,
+    .sapphires-tool .tool-stats,
+    .sapphires-tool .result-metrics{grid-template-columns:1fr}
+    .sapphires-tool .result-top{flex-direction:column}
+  }
+</style>
+
+<script>
+(function () {
+  const models = [
+    { provider: 'OpenAI', model: 'GPT-4.1 Mini', input: 0.40, output: 1.60, cached: 0.10 },
+    { provider: 'OpenAI', model: 'GPT-4.1', input: 2.00, output: 8.00, cached: 0.50 },
+    { provider: 'Anthropic', model: 'Claude Sonnet', input: 3.00, output: 15.00, cached: 0.30 },
+    { provider: 'Anthropic', model: 'Claude Haiku', input: 0.80, output: 4.00, cached: 0.08 },
+    { provider: 'Google', model: 'Gemini Flash', input: 0.35, output: 1.05, cached: 0.05 },
+    { provider: 'Google', model: 'Gemini Pro', input: 1.25, output: 5.00, cached: 0.20 }
+  ];
+
+  const $ = (id) => document.getElementById(id);
+  const req = $('req'), inTok = $('inTok'), outTok = $('outTok'), cacheTok = $('cacheTok');
+  const pricingBody = $('pricingBody'), results = $('results');
+  const sumIn = $('sumIn'), sumOut = $('sumOut'), sumCache = $('sumCache');
+  const nf = new Intl.NumberFormat('en-US');
+  const cf = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+
+  function renderPricing() {
+    pricingBody.innerHTML = models.map((m, i) => `
+      <tr>
+        <td><strong>${m.provider}</strong></td>
+        <td>${m.model}</td>
+        <td><input data-i="${i}" data-k="input" type="number" min="0" step="0.01" value="${m.input}"></td>
+        <td><input data-i="${i}" data-k="output" type="number" min="0" step="0.01" value="${m.output}"></td>
+        <td><input data-i="${i}" data-k="cached" type="number" min="0" step="0.01" value="${m.cached}"></td>
+      </tr>
+    `).join('');
+
+    pricingBody.querySelectorAll('input').forEach(el => {
+      el.addEventListener('input', (e) => {
+        const i = Number(e.target.dataset.i);
+        const k = e.target.dataset.k;
+        models[i][k] = Number(e.target.value) || 0;
+        update();
+      });
+    });
+  }
+
+  function update() {
+    const requests = Number(req.value) || 0;
+    const totalInput = requests * (Number(inTok.value) || 0);
+    const totalOutput = requests * (Number(outTok.value) || 0);
+    const totalCached = requests * (Number(cacheTok.value) || 0);
+
+    sumIn.textContent = nf.format(totalInput) + ' tokens';
+    sumOut.textContent = nf.format(totalOutput) + ' tokens';
+    sumCache.textContent = nf.format(totalCached) + ' tokens';
+
+    const ranked = models.map(m => {
+      const inputCost = totalInput / 1e6 * m.input;
+      const outputCost = totalOutput / 1e6 * m.output;
+      const cachedCost = totalCached / 1e6 * m.cached;
+      return { ...m, inputCost, outputCost, cachedCost, total: inputCost + outputCost + cachedCost };
+    }).sort((a, b) => a.total - b.total);
+
+    results.innerHTML = ranked.map((m, i) => `
+      <div class="result-card">
+        <div class="result-top">
+          <div>
+            <div class="provider">${m.provider}</div>
+            <div class="model">${m.model}</div>
+          </div>
+          <div>
+            ${i === 0 ? '<span class="badge badge-win">Lowest cost</span>' : i === 1 ? '<span class="badge badge-mid">Runner up</span>' : ''}
+            <div class="price">${cf.format(m.total)}</div>
+          </div>
+        </div>
+        <div class="result-metrics">
+          <div><small>Input</small><strong>${cf.format(m.inputCost)}</strong></div>
+          <div><small>Output</small><strong>${cf.format(m.outputCost)}</strong></div>
+          <div><small>Cached</small><strong>${cf.format(m.cachedCost)}</strong></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  [req, inTok, outTok, cacheTok].forEach(el => el.addEventListener('input', update));
+  renderPricing();
+  update();
+})();
+</script>

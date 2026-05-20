@@ -22,8 +22,8 @@ theme = "PaperMod"
   ShowToc = true
   TocOpen = false
 
-  # Custom CSS for ScreenlessTracker-style redesign
-  assets.customCSS = ["CSS/custom.css"]
+  # Custom CSS
+  assets.customCSS = ["css/custom.css"]
 
   # Cover image settings
   cover.linkFullImages = true
@@ -51,21 +51,31 @@ theme = "PaperMod"
     name = "All Reviews"
     url = "/categories/reviews/"
     weight = 10
+
   [[menu.main]]
     identifier = "reviews"
     name = "Reviews"
     url = "/categories/reviews/"
     weight = 20
+
   [[menu.main]]
     identifier = "best-picks"
     name = "Best Picks"
     url = "/categories/best-picks/"
     weight = 30
+
+  [[menu.main]]
+    identifier = "tools"
+    name = "Tools"
+    url = "/tools/llm-api-pricing-calculator/"
+    weight = 35
+
   [[menu.main]]
     identifier = "guides"
     name = "Guides"
     url = "/categories/guides/"
     weight = 40
+
   [[menu.main]]
     identifier = "comparisons"
     name = "Comparisons"
